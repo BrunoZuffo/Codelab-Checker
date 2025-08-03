@@ -1,83 +1,163 @@
-# Projeto Férias - USP CodeLab Sanca
+# 🛡️ CodelabS Checker
 
-## 🧪 Bem-vindo(a), Codelaber\!
+**Area:** Backend (API Development)  
+**Technologies:** Node.js + Express.js  
+**Status:** 🚧 In development
 
-Seja muito bem-vindo(a) ao repositório do nosso **Projeto de Férias**\! Criamos este projeto especialmente para você, que está começando sua jornada no USP CodeLab Sanca!.
+Welcome, Codelaber! This is the **CodelabS Checker** project — a RESTful API developed to fight the chronic misspelling of the **USP CodeLab** group's name.
 
-### O Propósito Deste Repositório
+## 📋 Description
 
-Este repositório é uma coleção de projetos práticos, desenhados para te desafiar e, principalmente, **incentivar o aprendizado de novas tecnologias**. Cada pasta contém um desafio completo, requisitos bem definidos e um guia para te ajudar a dar os primeiros passos.
+Everyone knows that **USP CodeLab** is the best extension group at USP. But unfortunately, many people keep getting the name wrong:
 
-O objetivo não é entregar um projeto perfeito, mas sim que você **aprenda, experimente, erre e evolua**. Queremos que este seja um ambiente seguro para você explorar áreas como Frontend, Backend e Web Scraping com tecnologias que usamos no dia a dia do grupo.
+> `CodelabS`, `Cod lab`, `Code labe`, `Codalab`, `Codeleb`...
 
------
+This project was created to **monitor**, **log**, and **analyze** those name errors in a fun and structured way.
 
-## Os Desafios
+---
 
-Temos três projetos iniciais nessa edição. Cada um foca em uma área e em tecnologias diferentes. Escolha o que mais te interessar e clique para ver os detalhes completos (você pode fazer mais de um projeto)\!
+## 🚀 Features
 
-| Projeto | Área | Tecnologias |
-| :--- | :--- | :--- |
-| 💻 **Codle** | Frontend | `React` + `Tailwind CSS` |
-| ⚙️ **CodelabS Checker** | Backend | `Node.js` + `Express.js` |
-| 🤖 **BandejãoQuality** | Web Scraping | `Python` ou `JavaScript` |
+| Feature | Method and Route        | Description |
+|---------|-------------------------|-------------|
+| ✅ Name verification | `POST /verificar` | Verifies if a submitted name is valid (present in the database). Saves incorrect entries for statistics. |
+| ➕ Register valid names | `POST /nomes/validos` | Adds new valid spellings of "Codelab" to the database. |
+| 🎲 Generate incorrect names | `GET /nomes/aleatorio` | Returns a randomly generated incorrect name. |
+| 📊 Error statistics | `GET /estatisticas/erros` | Lists the top 5 most frequently submitted incorrect names. |
 
------
+---
 
-## Como Contribuir
+## 💡 How it works
 
-Para manter o repositório organizado e permitir que todos trabalhem em seus projetos de forma independente, seguiremos um fluxo de contribuição baseado em **branches**. Cada membro deve criar sua própria branch para desenvolver a solução de um dos desafios.
+The API uses local `.json` files as a simple database:
 
-Siga os passos abaixo:
+- `nomes_corretos.json`: Valid name spellings.
+- `corretos.json`: Log of correct submissions.
+- `incorretos.json`: Log of incorrect submissions.
 
-#### 1\. Clone o Repositório
+---
 
-Primeiro, Clone este repositório:
+## 🧠 Example Workflow
 
-```bash
-git clone https://github.com/USPCodeLabSanca/Projeto_Ferias.git
-cd Projeto_Ferias
-```
+1. A client sends a `POST /verificar` request with a name.
+2. If the name is in `nomes_corretos.json`, it’s saved as correct.
+3. Otherwise, it’s logged in `incorretos.json` with a timestamp.
+4. Later, `GET /estatisticas/erros` returns the most common mistakes.
 
-#### 2\. Crie sua Branch Pessoal
+---
 
-Antes de começar a codificar, crie uma nova branch a partir da `main`. Use um nome que identifique você e o projeto que escolheu. O padrão recomendado é `seu-nome/nome-do-projeto`.
+## ⚙️ Getting Started
 
-```bash
-# Exemplo para o projeto Codle
-git checkout -b gabriel-barbosa/codle
+### 1. Prerequisites
 
-# Exemplo para o projeto da API
-git checkout -b shogo-shima/codelabs-checker
-```
+- [Node.js](https://nodejs.org/) installed
 
-Dessa forma, todo o seu progresso ficará isolado na sua branch, sem interferir no trabalho de outros membros.
-
-#### 3\. Desenvolva o seu Projeto\!
-
-Mãos à obra\! Acesse a pasta do desafio que você escolheu e siga as instruções do `README.md` específico do projeto. **Todo o código que você escrever deve ser feito dentro da sua branch.**
-
-#### 4\. Salve e Envie seu Progresso
-
-Conforme for avançando, salve suas alterações com commits claros e envie-as para este repositório:
+### 2. Install dependencies
 
 ```bash
-# Adiciona todos os arquivos modificados
-git add .
-
-# Cria um commit com uma mensagem descritiva
-git commit -m "feature/implementa a lógica de verificação de letras no Codle"
-
-# Envia a sua branch para o repositório remoto 
-git push origin seu-nome/nome-do-projeto
+npm install
 ```
 
------
+### 3. (Optional) Install nodemon for development
 
-## ✨ Ultimo Aviso:
+```bash
+npm install -D nodemon
+```
 
-Estamos muito empolgados para ver suas soluções e te ajudar a crescer como desenvolvedor(a). Lembre-se: o objetivo é aprender, então não hesite em perguntar, experimentar e, acima de tudo, se divertir.
+### 4. Run the server
 
-**Bom desenvolvimento\!**
+```bash
+npm run dev   # with nodemon
+# or
+npm start     # without nodemon
+```
 
-**🚀 É ritmo de Codelab**
+The server will be available at:  
+📍 `http://localhost:3000`
+
+---
+
+## 🔁 API Endpoints
+
+### `GET /`
+Returns a simple message confirming the API is running.
+
+### `POST /verificar`
+Checks whether a submitted name is valid. Example payload:
+
+```json
+{
+  "nome": "Codelab"
+}
+```
+
+### `POST /nomes/validos`
+Adds new valid names to the database. Example payload:
+
+```json
+{
+  "nome": ["USPCodeLab", "codelab"]
+}
+```
+
+### `GET /nomes/aleatorio`
+Returns a randomly generated invalid name.
+
+### `GET /estatisticas/erros`
+Returns the 5 most common incorrect names and how many times each appeared.
+
+---
+
+## 🔧 JSON File Structures
+
+### nomes_corretos.json
+```json
+{
+  "nomes_corretos": ["codelab", "uspcodeLab"]
+}
+```
+
+### incorretos.json
+```json
+{
+  "incorretos": [
+    { "nome": "codelabs", "data": "2025-08-01T11:21:11.562Z" }
+  ],
+  "qntd_incorretos": 1
+}
+```
+
+---
+
+## 🧪 API Testing Tools
+
+We recommend using [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/) to test the endpoints.
+
+---
+
+## 📚 Learning Resources
+
+- [USP CodeLab Node.js course](#)
+- [Express documentation](https://expressjs.com/)
+- [What is a REST API? (YouTube)](https://www.youtube.com/watch?v=vGuqKIRWosk)
+- [How to use Insomnia](https://www.youtube.com/watch?v=EVfKyj0H8s0)
+
+---
+
+## 👨‍💻 Developed by
+
+Bruno Zuffo  
+[GitHub](https://github.com/BrunoZuffo) · [LinkedIn](https://www.linkedin.com/in/bruno-zuffo-10088b216/)
+
+---
+
+## 📎 License
+
+This project was developed for educational purposes inside the USP CodeLab community.  
+Feel free to explore and expand upon it!
+
+---
+
+## 📣 Final Tip
+
+Mistakes can be valuable learning moments — and now, even spelling mistakes generate insights! 🚀
